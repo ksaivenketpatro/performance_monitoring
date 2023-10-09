@@ -1,0 +1,59 @@
+version: "3"
+services:
+  swarm: 
+    image: dockersamples/visualizer
+    deploy: 
+      replicas: 1 
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==student"
+    ports: 
+      - "8072:8080"
+
+
+
+swarm: 
+    image: dockersamples/visualizer
+    deploy: 
+      replicas: 1 
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==student"
+    ports: 
+      - "8072:8080"
+      
+  locust:
+    image: locustio/locust
+    deploy: 
+      replicas: 1
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==student"
+    ports:
+      - "8082:8089"
+  
+  mongo:
+    image: mongo
+    deploy: 
+      replicas: 1
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==student"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  cAdvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    deploy: 
+      replicas: 1 
+      placement:
+        constraints:
+          - "node.role==manager"
+          - "node.hostname==student"
+    ports:
+      - "8888:8080"
